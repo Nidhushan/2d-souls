@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HeroKnight : MonoBehaviour {
 
@@ -7,6 +8,10 @@ public class HeroKnight : MonoBehaviour {
     [SerializeField] float      m_jumpForce = 7.5f;
     [SerializeField] float      m_rollForce = 6.0f;
     [SerializeField] GameObject m_slideDust;
+    public int health = 100;
+    public int stamina = 100;
+    public HealthBar healthbar;
+    public StaminaBar staminabar;
 
     private Animator            m_animator;
     private Rigidbody2D         m_body2d;
@@ -22,13 +27,17 @@ public class HeroKnight : MonoBehaviour {
     private float               m_rollCurrentTime;
     private bool                m_CanDamage = true;
     private bool                takingDamage = false;
+    private bool isAttacking = false;
 
+    private List<Coroutine> staminaCoroutines = new();
     // Use this for initialization
     void Start ()
     {
         m_animator = GetComponent<Animator>();
         m_body2d = GetComponent<Rigidbody2D>();
         m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_HeroKnight>();
+        healthbar.SetMaxHealth(health);
+        staminabar.SetMaxStamina(stamina);
     }
 
     // Update is called once per frame
@@ -78,7 +87,7 @@ public class HeroKnight : MonoBehaviour {
         }
 
         // Move
-        if (!m_rolling && !takingDamage)
+        if (!m_rolling && !takingDamage && !isAttacking)
         {
             m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
         }
@@ -123,11 +132,18 @@ public class HeroKnight : MonoBehaviour {
         else if (Input.GetMouseButtonUp(1))
             m_animator.SetBool("IdleBlock", false);
         // Roll
-        else if (Input.GetKeyDown(KeyCode.LeftShift) && !m_rolling && !m_isWallSliding)
+        else if (Input.GetKeyDown(KeyCode.LeftShift) && !m_rolling && !m_isWallSliding && stamina >= 20)
         {
             m_rolling = true;
             m_CanDamage = false;
             StartCoroutine(Dodge());
+            stamina -= 20;
+            staminabar.SetStamina(stamina);
+            foreach (var coroutine in staminaCoroutines)
+            {
+                StopCoroutine(coroutine);
+            }
+            staminaCoroutines.Add(StartCoroutine(StaminaIncrease()));
             m_animator.SetTrigger("Roll");
             m_body2d.velocity = new Vector2(m_facingDirection * m_rollForce, m_body2d.velocity.y);
         }
@@ -141,7 +157,7 @@ public class HeroKnight : MonoBehaviour {
             m_groundSensor.Disable(0.2f);
         }
         //Run
-        else if (Mathf.Abs(inputX) > Mathf.Epsilon)
+        else if (Mathf.Abs(inputX) > Mathf.Epsilon && !isAttacking)
         {
             // Reset timer
             m_delayToIdle = 0.05f;
@@ -167,5 +183,16 @@ public class HeroKnight : MonoBehaviour {
     {
         yield return new WaitForSeconds(0.3f);
         m_CanDamage = true;
+    }
+
+    IEnumerator StaminaIncrease()
+    {
+        yield return new WaitForSeconds(2.0f);
+        while (stamina < 100)
+        {
+            stamina++;
+            staminabar.SetStamina(stamina);
+            yield return new WaitForSeconds(0.05f);
+        }
     }
 }
