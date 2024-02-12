@@ -21,6 +21,7 @@ public class HeroKnight : MonoBehaviour {
     private readonly float      m_rollDuration = 8.0f / 14.0f;
     private float               m_rollCurrentTime;
     private bool                m_CanDamage = true;
+    private bool                takingDamage = false;
 
     // Use this for initialization
     void Start ()
@@ -44,7 +45,6 @@ public class HeroKnight : MonoBehaviour {
         if (m_rollCurrentTime > m_rollDuration)
         {
             m_rolling = false;
-            m_CanDamage = true;
         }
 
         //Check if character just landed on the ground
@@ -78,15 +78,25 @@ public class HeroKnight : MonoBehaviour {
         }
 
         // Move
-        if (!m_rolling )
+        if (!m_rolling && !takingDamage)
+        {
             m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+        }
 
         //Set AirSpeed in animator
         m_animator.SetFloat("AirSpeedY", m_body2d.velocity.y);
 
         // -- Handle Animations --
+        if (Input.GetKeyDown(KeyCode.V) && m_CanDamage)
+        {
+            m_body2d.velocity = Vector2.zero;
+            takingDamage = true;
+            StartCoroutine(TakingDamage());
+            m_body2d.AddForce(new Vector2(-m_facingDirection * 100.0f, 0));
+            m_animator.SetTrigger("Hurt");
+        }
         //Attack
-        if(Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
+        else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
             m_currentAttack++;
 
@@ -117,6 +127,7 @@ public class HeroKnight : MonoBehaviour {
         {
             m_rolling = true;
             m_CanDamage = false;
+            StartCoroutine(Dodge());
             m_animator.SetTrigger("Roll");
             m_body2d.velocity = new Vector2(m_facingDirection * m_rollForce, m_body2d.velocity.y);
         }
@@ -144,5 +155,17 @@ public class HeroKnight : MonoBehaviour {
                 if(m_delayToIdle < 0)
                     m_animator.SetInteger("AnimState", 0);
         }
+    }
+
+    IEnumerator TakingDamage()
+    {
+        yield return new WaitForSeconds(0.1f);
+        takingDamage = false;
+    }
+
+    IEnumerator Dodge()
+    {
+        yield return new WaitForSeconds(0.3f);
+        m_CanDamage = true;
     }
 }
