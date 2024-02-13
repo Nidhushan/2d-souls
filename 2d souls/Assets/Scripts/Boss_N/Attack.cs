@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class Attack : StateMachineBehaviour
 {
@@ -8,50 +9,46 @@ public class Attack : StateMachineBehaviour
     Transform player;
     Rigidbody2D rb;
     public float attackRange = 3f;
+    //AIPath aiPath;
 
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = animator.GetComponentInParent<Rigidbody2D>();
+        //aiPath = animator.GetComponentInParent<AIPath>();
         int randomNum = Random.Range(1, 7);
-        Debug.Log(randomNum);
         switch (randomNum)
         {
             case 1:
-                Debug.Log("Attack on update");
                 animator.SetTrigger("Attack");
                 break;
 
             case 2:
-                Debug.Log("Attack 1 on update");
                 animator.SetTrigger("Attack 1");
                 break;
 
             case 3:
-                Debug.Log("Attack on update");
                 animator.SetTrigger("Attack 3");
                 break;
 
             case 4:
-                Debug.Log("Attack 1 on update");
                 animator.SetTrigger("Attack 4");
                 break;
 
             case 5:
-                Debug.Log("Attack on update");
                 animator.SetTrigger("Attack 5");
                 break;
 
             case 6:
-                Debug.Log("Attack 1 on update");
                 animator.SetTrigger("Attack Kick");
                 break;
 
             default:
-                Debug.Log("Not working......");
+                Debug.Log("Random attack Not working...... RandomNum = "+randomNum);
                 break;
         }
+        //aiPath.enabled = false;
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
