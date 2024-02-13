@@ -25,13 +25,13 @@ public class EnemyGFX : MonoBehaviour
         {
             transform.localScale = new Vector3(-1f, 1f, 1f);
             //boxCollider.offset = new Vector3(-0.93f, 0.38f);
-            circleCollider.offset = new Vector3(-0.84f, 0.45f);
+            circleCollider.offset = new Vector3(-1f, 0.30f);
         }
         else if(aiPath.desiredVelocity.x <= -0.01f)
         {
             transform.localScale = new Vector3(1f, 1f, 1f);
             //boxCollider.offset = new Vector3(0.15f, 0.44f);
-            circleCollider.offset = new Vector3(0f, 0.45f);
+            circleCollider.offset = new Vector3(0f, 0.3f);
         }
     }
 }
