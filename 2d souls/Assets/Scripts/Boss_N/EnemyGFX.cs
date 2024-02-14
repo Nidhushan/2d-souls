@@ -25,6 +25,9 @@ public class EnemyGFX : MonoBehaviour
     public float attackRange = 10.2f;
     public float heroAttackRange = 10.2f;
     public GameObject heroGameOver;
+    public GameObject enemyHealthBar;
+    public GameObject plyrHealthBar;
+    public GameObject plyrStaminaBar;
     private float timer = 0f;
     private float interval = 0.5f;
     private float heroAttackTimer = 0f;
@@ -33,8 +36,8 @@ public class EnemyGFX : MonoBehaviour
     private float cheatInterval = 3f;
     private float stageChangeTimer = 0f;
     private float stageChangeInterval = 0.5f;
-    public TextMeshProUGUI textMeshProUGUI;
     private bool stopDamage = false;
+    private bool healCheat = false;
 
     public HeroKnight hero;
 
@@ -87,7 +90,9 @@ public class EnemyGFX : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.H))
         {
-            hero.ResetHealth(); 
+            if(healCheat)
+                hero.ResetHealth();
+            healCheat = false;
         }
 
         Transform parentTransform = transform.parent;
@@ -200,11 +205,17 @@ public class EnemyGFX : MonoBehaviour
     public void gameOver()
     {
         heroGameOver.SetActive(true);
+        enemyHealthBar.SetActive(false);
+        plyrHealthBar.SetActive(false) ;
+        plyrStaminaBar.SetActive(false);
     }
 
     public void tryAgain()
     {
         heroGameOver.SetActive(false);
+        enemyHealthBar.SetActive(true);
+        plyrHealthBar.SetActive(true);
+        plyrStaminaBar.SetActive(true);
         SceneManager.LoadScene("Start");
     }
 
