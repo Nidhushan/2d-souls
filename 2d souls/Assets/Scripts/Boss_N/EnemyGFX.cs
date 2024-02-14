@@ -26,8 +26,7 @@ public class EnemyGFX : MonoBehaviour
     public float heroAttackRange = 10.2f;
     public GameObject heroGameOver;
     public GameObject enemyHealthBar;
-    public GameObject plyrHealthBar;
-    public GameObject plyrStaminaBar;
+    public GameObject playerCanvas;
     private float timer = 0f;
     private float interval = 0.5f;
     private float heroAttackTimer = 0f;
@@ -37,7 +36,7 @@ public class EnemyGFX : MonoBehaviour
     private float stageChangeTimer = 0f;
     private float stageChangeInterval = 0.5f;
     private bool stopDamage = false;
-    private bool healCheat = false;
+    private bool healCheat = true;
 
     public HeroKnight hero;
 
@@ -50,6 +49,9 @@ public class EnemyGFX : MonoBehaviour
         health = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
         dmgTaken = 10;
+        heroGameOver.SetActive(false);
+        enemyHealthBar.SetActive(true);
+        playerCanvas.SetActive(true);
     }
 
     void Update()
@@ -187,12 +189,13 @@ public class EnemyGFX : MonoBehaviour
 
     private void ResetColor()
     {
+
         spriteRenderer.color = originalColor;
     }
 
     public void boss_n_Die()
     {
-        SceneManager.LoadScene("Game");
+        gameOver();
     }
 
     public void ResetHealth()
@@ -204,18 +207,14 @@ public class EnemyGFX : MonoBehaviour
 
     public void gameOver()
     {
-        heroGameOver.SetActive(true);
         enemyHealthBar.SetActive(false);
-        plyrHealthBar.SetActive(false) ;
-        plyrStaminaBar.SetActive(false);
+        playerCanvas.SetActive(false) ;
+        heroGameOver.SetActive(true);
+        
     }
 
     public void tryAgain()
     {
-        heroGameOver.SetActive(false);
-        enemyHealthBar.SetActive(true);
-        plyrHealthBar.SetActive(true);
-        plyrStaminaBar.SetActive(true);
         SceneManager.LoadScene("Start");
     }
 

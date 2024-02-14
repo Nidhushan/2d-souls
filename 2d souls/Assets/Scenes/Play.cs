@@ -9,4 +9,9 @@ public class Play : MonoBehaviour
     {
         SceneManager.LoadScene("Game");
     }
+
+    public void PlayBoss()
+    {
+        SceneManager.LoadScene("Boss N");
+    }
 }

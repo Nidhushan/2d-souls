@@ -2088,7 +2088,8 @@ MonoBehaviour:
   attackRange: 10.2
   heroAttackRange: 10.2
   heroGameOver: {fileID: 84022735}
-  textMeshProUGUI: {fileID: 0}
+  enemyHealthBar: {fileID: 378001860}
+  playerCanvas: {fileID: 1980615741}
   hero: {fileID: 2101053869}
 --- !u!4 &1378121621 stripped
 Transform:
@@ -2369,7 +2370,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Try again
+  m_text: Play Again
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
