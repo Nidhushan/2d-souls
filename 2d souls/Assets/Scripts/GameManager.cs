@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < bringerAmt; i++)
         {
             Instantiate(bringer, bringerSpawn.position, Quaternion.identity);
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
         }
         spawningBringers = false;
         amtOfBringers = GameObject.FindGameObjectsWithTag("Death").Length;
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < banditAmt; i++)
         {
             Instantiate(bandit, banditSpawn.position, Quaternion.identity);
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
         }
         spawningBandits = false;
         amtOfBandits = GameObject.FindGameObjectsWithTag("Bandit").Length;
