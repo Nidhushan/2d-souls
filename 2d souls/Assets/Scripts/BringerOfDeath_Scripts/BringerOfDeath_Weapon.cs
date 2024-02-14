@@ -12,10 +12,17 @@ public class BringerOfDeath_Weapon : MonoBehaviour
     public Vector3 MagicAttackOffset;
     public float MagicAttackRange = 3f;
 
+    public float magicAttackCooldown = 5f;
+
+    public float magicAttackCooldownTimer = 0f;
+
     public LayerMask attackMask;
 
     public GameObject SpellPrefab;
     public Vector3 SpellSpawnOffset;
+    public float spellCooldown = 3f;
+
+    public float spellCooldownTimer = 0f;
 
     Transform player;
 
@@ -54,16 +61,26 @@ public class BringerOfDeath_Weapon : MonoBehaviour
         //spell.transform.localScale()
     }
 
+    public void resetTimer(float Duration, ref float timer)
+    {
+        timer = Duration;
+        return; 
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        spellCooldownTimer = 0f;
+        magicAttackCooldownTimer = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        spellCooldownTimer -= Time.deltaTime;
+        magicAttackCooldownTimer -= Time.deltaTime;
     }
 }

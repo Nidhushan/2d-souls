@@ -7,15 +7,16 @@ public class BringerOfDeath_Move : StateMachineBehaviour
     public float speed = 1.0f;
     public float AttackRange = 5.0f;
 
+    public float MagicAttackRange = 5.0f;
+
     public float SpellRange = 10.0f;
 
-    public float SpellCoolDown = 3.0f;
-
-    float SpellCoolDownTimer = 0f;
 
     Transform player;
     Rigidbody2D rb;
     BringerOfDeath boss;
+
+    BringerOfDeath_Weapon weapon;
     float distance;
 
 
@@ -25,7 +26,7 @@ public class BringerOfDeath_Move : StateMachineBehaviour
        player = GameObject.FindGameObjectWithTag("Player").transform;
        rb = animator.GetComponent<Rigidbody2D>();
        boss = animator.GetComponent<BringerOfDeath>();
-       SpellCoolDownTimer = SpellCoolDown;
+       weapon = animator.GetComponent<BringerOfDeath_Weapon>();
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -39,12 +40,16 @@ public class BringerOfDeath_Move : StateMachineBehaviour
 
         distance = Vector2.Distance(player.position, rb.position);
 
-        SpellCoolDownTimer -= Time.fixedDeltaTime;
-        if (distance > SpellRange && SpellCoolDownTimer<0f)
+        
+        if (distance > SpellRange && weapon.spellCooldownTimer < 0f)
         {
             animator.SetTrigger("CastSpell");
-            SpellCoolDownTimer = SpellCoolDown;
+            weapon.spellCooldownTimer = weapon.spellCooldown;
 
+        } else if (distance<MagicAttackRange && weapon.magicAttackCooldownTimer < 0f)
+        {
+            animator.SetTrigger("MagicAttack");
+            weapon.magicAttackCooldownTimer = weapon.magicAttackCooldown;
         } else if (distance<AttackRange)
         {
             animator.SetTrigger("Attack");
@@ -59,6 +64,7 @@ public class BringerOfDeath_Move : StateMachineBehaviour
     {
        animator.ResetTrigger("Attack");
        animator.ResetTrigger("CastSpell");
+       animator.ResetTrigger("MagicAttack");
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
