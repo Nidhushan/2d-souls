@@ -4,19 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-<<<<<<< HEAD
   - boss_N
-=======
-  - Enemy
->>>>>>> andy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - 
   - Water
   - UI
-  - Enemy
+  - 
   - 
   - 
   - 

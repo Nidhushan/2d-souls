@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Timeline;
-using Unity.VisualScripting;
 
 public class HeroKnight : MonoBehaviour {
 
     [SerializeField] float      m_speed = 4.0f;
     [SerializeField] float      m_jumpForce = 7.5f;
-    [SerializeField] float      m_rollForce = 12.0f;
+    [SerializeField] float      m_rollForce = 6.0f;
     [SerializeField] GameObject m_slideDust;
     public int health = 100;
     public int stamina = 100;
@@ -30,10 +28,6 @@ public class HeroKnight : MonoBehaviour {
     private bool                m_CanDamage = true;
     private bool                takingDamage = false;
     private bool isAttacking = false;
-
-    public Vector3 attackOffset;
-    public float attackRange = 1f;
-    public LayerMask attackMask;
 
     private List<Coroutine> staminaCoroutines = new();
     // Use this for initialization
@@ -126,20 +120,6 @@ public class HeroKnight : MonoBehaviour {
             // Call one of three attack animations "Attack1", "Attack2", "Attack3"
             m_animator.SetTrigger("Attack" + m_currentAttack);
 
-            Vector3 pos = transform.position;
-            pos += transform.right * attackOffset.x;
-            pos += transform.up * attackOffset.y;
-
-            Collider2D colInfo = Physics2D.OverlapCircle(pos, attackRange, attackMask);
-            if (colInfo != null)
-            {
-                //if (colInfo.gameObject.CompareTag("Death"))
-                //    colInfo.GetComponent<BringerOfDeath>().TakeDamage(20);
-                //else if (colInfo.gameObject.CompareTag("Bandit"))
-                //    colInfo.GetComponent<>
-                colInfo.GetComponent<BringerOfDeath>().TakeDamage(20);
-            }
-
             // Reset timer
             m_timeSinceAttack = 0.0f;
         }
@@ -191,26 +171,6 @@ public class HeroKnight : MonoBehaviour {
                 if(m_delayToIdle < 0)
                     m_animator.SetInteger("AnimState", 0);
         }
-
-        if (health <= 0)
-        {
-            m_animator.SetTrigger("Death");
-            StartCoroutine(Die());
-        }
-    }
-
-    public void TakeDamage(int dmg)
-    {
-        if (m_CanDamage)
-        {
-            m_body2d.velocity = Vector2.zero;
-            takingDamage = true;
-            health -= dmg;
-            healthbar.SetHealth(health);
-            StartCoroutine(TakingDamage());
-            m_body2d.AddForce(new Vector2(-m_facingDirection * 100.0f, 0));
-            m_animator.SetTrigger("Hurt");
-        }
     }
 
     IEnumerator TakingDamage()
@@ -221,23 +181,18 @@ public class HeroKnight : MonoBehaviour {
 
     IEnumerator Dodge()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
         m_CanDamage = true;
     }
 
     IEnumerator StaminaIncrease()
     {
+        yield return new WaitForSeconds(2.0f);
         while (stamina < 100)
         {
             stamina++;
             staminabar.SetStamina(stamina);
             yield return new WaitForSeconds(0.05f);
         }
-    }
-
-    IEnumerator Die()
-    {
-        yield return new WaitForSeconds(1.5f);
-        Destroy(gameObject);
     }
 }
