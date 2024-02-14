@@ -10,14 +10,15 @@ public class PlayAgain : MonoBehaviour
 
     private void Update()
     {
-        if (GlobalVars.waves > 1)
-            tmp.text = "You Survived " + GlobalVars.waves + " Waves";
+        int waves = GlobalVars.waves - 1;
+        if (waves > 1 || waves == 0)
+            tmp.text = "You Survived " + waves + " Waves";
         else
-            tmp.text = "You Survived " + GlobalVars.waves + " Wave";
+            tmp.text = "You Survived " + waves + " Wave";
     }
 
     public void Play()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Start");
     }
 }

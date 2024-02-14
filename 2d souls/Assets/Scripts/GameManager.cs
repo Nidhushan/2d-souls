@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -33,18 +34,20 @@ public class GameManager : MonoBehaviour
         {
             amtOfBandits = GameObject.FindGameObjectsWithTag("Bandit").Length;
             amtOfBringers = GameObject.FindGameObjectsWithTag("Death").Length;
-            if (amtOfBringers <= 0 && amtOfBandits <= 0 )
+            if (amtOfBringers <= 0 && amtOfBandits <= 0)
             {
                 currentWave += 1;
                 player.GetComponent<HeroKnight>().ResetHealth();
                 if (currentWave % 2 == 0)
                 {
                     banditAmt++;
+                    banditAmt = Math.Clamp(banditAmt, 0, 4);
                     StartCoroutine(SpawnBandits());
                 }
                 else
                 {
                     bringerAmt++;
+                    bringerAmt = Math.Clamp(bringerAmt, 0, 4);
                     StartCoroutine(SpawnBringers());
                 }
                 StartCoroutine(Display());
@@ -65,7 +68,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < bringerAmt; i++)
         {
             Instantiate(bringer, bringerSpawn.position, Quaternion.identity);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
         }
         spawningBringers = false;
         amtOfBringers = GameObject.FindGameObjectsWithTag("Death").Length;
@@ -77,7 +80,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < banditAmt; i++)
         {
             Instantiate(bandit, banditSpawn.position, Quaternion.identity);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
         }
         spawningBandits = false;
         amtOfBandits = GameObject.FindGameObjectsWithTag("Bandit").Length;
