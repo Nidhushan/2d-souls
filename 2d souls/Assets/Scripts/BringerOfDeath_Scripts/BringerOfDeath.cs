@@ -12,7 +12,7 @@ public class BringerOfDeath : MonoBehaviour
     Transform player;
     private SpriteRenderer _spriteRenderer;
     Animator _animator;
-     
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -42,9 +42,12 @@ public class BringerOfDeath : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
-        enemyHealthbar.UpdateHealthbar(health, maxHealth);
-        _animator.SetTrigger("Hurt");
+        if (health > 0)
+        {
+            health -= damage;
+            enemyHealthbar.UpdateHealthbar(health, maxHealth);
+            _animator.SetTrigger("Hurt");
+        }
     }
 
     IEnumerator Die()

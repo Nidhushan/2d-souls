@@ -8,6 +8,7 @@ public class BringerOfDeath_Move : StateMachineBehaviour
     public float AttackRange = 3.0f;
     private Transform player;
     private Rigidbody2D rb;
+    private bool isDead = false;
     BringerOfDeath boss;
     BringerOfDeathWeapon weapon;
 
@@ -23,21 +24,25 @@ public class BringerOfDeath_Move : StateMachineBehaviour
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        boss.Flip();
-
-        Vector2 target = new(player.position.x, rb.position.y);
-
-        Vector2 newPos = Vector2.MoveTowards(rb.position, target, speed * Time.fixedDeltaTime);
-        rb.MovePosition(newPos);
-
-        if (Vector2.Distance(player.position, rb.position) <= AttackRange && weapon.canAttack && boss.health > 0)
+        if (!isDead)
         {
-            animator.SetTrigger("Attack");
-        }
+            boss.Flip();
 
-        if (boss.health <= 0)
-        {
-            animator.SetTrigger("Death");
+            Vector2 target = new(player.position.x, rb.position.y);
+
+            Vector2 newPos = Vector2.MoveTowards(rb.position, target, speed * Time.fixedDeltaTime);
+            rb.MovePosition(newPos);
+
+            if (Vector2.Distance(player.position, rb.position) <= AttackRange && weapon.canAttack && boss.health > 0)
+            {
+                animator.SetTrigger("Attack");
+            }
+
+            if (boss.health <= 0)
+            {
+                animator.SetTrigger("Death");
+                isDead = true;
+            }
         }
     }
 
@@ -45,5 +50,6 @@ public class BringerOfDeath_Move : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("Attack");
+        animator.ResetTrigger("Death");
     }
 }
