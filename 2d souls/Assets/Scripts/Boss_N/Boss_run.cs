@@ -37,5 +37,10 @@ public class Boss_run : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("Attack start");
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dead") && animator.GetBool("Dead"))
+        {
+            aiPath.maxSpeed = 0.1f;
+            animator.Play("Dead");
+        }
     }
 }

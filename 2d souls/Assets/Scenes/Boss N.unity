@@ -885,7 +885,7 @@ GameObject:
   - component: {fileID: 844643047}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: boss_N
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1565,10 +1565,17 @@ MonoBehaviour:
   dmgTaken: 1
   maxHealth: 10
   health: 10
-  animator: {fileID: 0}
+  mAnimator: {fileID: 1378121622}
+  plyrAnimator: {fileID: 1533380354}
+  attackRange: 10.2
 --- !u!4 &1378121621 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2228371479296758372, guid: 603cffc8f870c49dd80868aba7cde3a0, type: 3}
+  m_PrefabInstance: {fileID: 3740002320933289096}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1378121622 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5906164700536375976, guid: 603cffc8f870c49dd80868aba7cde3a0, type: 3}
   m_PrefabInstance: {fileID: 3740002320933289096}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1392117332
@@ -1861,6 +1868,11 @@ CanvasRenderer:
 --- !u!4 &1533380350 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8413529789942519730, guid: a4b4a6d32bcb19248a754d6602ffc7e4, type: 3}
+  m_PrefabInstance: {fileID: 1374358647}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1533380354 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2655505060201611074, guid: a4b4a6d32bcb19248a754d6602ffc7e4, type: 3}
   m_PrefabInstance: {fileID: 1374358647}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1649565653
@@ -2235,6 +2247,10 @@ PrefabInstance:
     - target: {fileID: 8854520941607326638, guid: 603cffc8f870c49dd80868aba7cde3a0, type: 3}
       propertyPath: m_Name
       value: Mercenary
+      objectReference: {fileID: 0}
+    - target: {fileID: 8854520941607326638, guid: 603cffc8f870c49dd80868aba7cde3a0, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6987242765103416837, guid: 603cffc8f870c49dd80868aba7cde3a0, type: 3}
