@@ -36,11 +36,6 @@ public class EnemyGFX : MonoBehaviour
 
     void Update()
     {
-        if (health <= 0)
-        {
-            aiPath.maxSpeed = 0.1f;
-            mAnimator.SetTrigger("Dead");
-        }
         Transform parentTransform = transform.parent;
         if (aiPath.desiredVelocity.x >= 0.01)
         {
@@ -88,6 +83,11 @@ public class EnemyGFX : MonoBehaviour
 
     public void takeDamage(int damage)
     {
+        if (health <= 0)
+        {
+            aiPath.maxSpeed = 0.1f;
+            mAnimator.SetTrigger("Dead");
+        }
         if (health > 0)
         {
             health = health - damage;
@@ -105,13 +105,8 @@ public class EnemyGFX : MonoBehaviour
 
     public void boss_n_Die()
     {
-        Invoke("changeScene", 3f);
-        Destroy(transform.parent.gameObject);
-    }
-
-    public void changeScene()
-    {
         SceneManager.LoadScene("Game");
     }
+
 
 }
