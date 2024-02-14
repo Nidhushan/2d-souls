@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Timeline;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class HeroKnight : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class HeroKnight : MonoBehaviour {
     [SerializeField] float      m_rollForce = 12.0f;
     [SerializeField] GameObject m_slideDust;
     public int health = 100;
+    public int maxHealth = 100;
     public int stamina = 100;
     public HealthBar healthbar;
     public StaminaBar staminabar;
@@ -30,6 +32,7 @@ public class HeroKnight : MonoBehaviour {
     private bool                m_CanDamage = true;
     private bool                takingDamage = false;
     private bool isAttacking = false;
+    private bool alreadyDead = false;
 
     public Vector3 attackOffset;
     public float attackRange = 1f;
@@ -42,7 +45,7 @@ public class HeroKnight : MonoBehaviour {
         m_animator = GetComponent<Animator>();
         m_body2d = GetComponent<Rigidbody2D>();
         m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_HeroKnight>();
-        healthbar.SetMaxHealth(health);
+        healthbar.SetMaxHealth(maxHealth);
         staminabar.SetMaxStamina(stamina);
     }
 
@@ -102,7 +105,7 @@ public class HeroKnight : MonoBehaviour {
         m_animator.SetFloat("AirSpeedY", m_body2d.velocity.y);
 
         // -- Handle Animations --
-        if (Input.GetKeyDown(KeyCode.V) && m_CanDamage)
+        if (Input.GetKeyDown(KeyCode.V) && m_CanDamage && !alreadyDead)
         {
             m_body2d.velocity = Vector2.zero;
             takingDamage = true;
@@ -192,8 +195,9 @@ public class HeroKnight : MonoBehaviour {
                     m_animator.SetInteger("AnimState", 0);
         }
 
-        if (health <= 0)
+        if (health <= 0 && !alreadyDead)
         {
+            alreadyDead = true;
             m_animator.SetTrigger("Death");
             StartCoroutine(Die());
         }
@@ -211,6 +215,12 @@ public class HeroKnight : MonoBehaviour {
             m_body2d.AddForce(new Vector2(-m_facingDirection * 100.0f, 0));
             m_animator.SetTrigger("Hurt");
         }
+    }
+
+    public void ResetHealth()
+    {
+        health = maxHealth;
+        healthbar.SetHealth(maxHealth);
     }
 
     IEnumerator TakingDamage()
@@ -237,7 +247,7 @@ public class HeroKnight : MonoBehaviour {
 
     IEnumerator Die()
     {
-        yield return new WaitForSeconds(1.5f);
-        Destroy(gameObject);
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("End");
     }
 }
