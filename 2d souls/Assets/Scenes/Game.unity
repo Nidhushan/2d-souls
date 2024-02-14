@@ -1233,7 +1233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8413529789942519730, guid: a4b4a6d32bcb19248a754d6602ffc7e4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.446861
+      value: -5.46
       objectReference: {fileID: 0}
     - target: {fileID: 8413529789942519730, guid: a4b4a6d32bcb19248a754d6602ffc7e4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1945,6 +1945,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8123999761576712991, guid: 056386234359cd642ae947aeddb67190, type: 3}
+      propertyPath: SpellPrefab
+      value: 
+      objectReference: {fileID: 4632313193435917242, guid: d9d1015a559fc7c4c91f11ba9b870137, type: 3}
+    - target: {fileID: -8123999761576712991, guid: 056386234359cd642ae947aeddb67190, type: 3}
+      propertyPath: SpellSpawnOffset.x
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8123999761576712991, guid: 056386234359cd642ae947aeddb67190, type: 3}
+      propertyPath: SpellSpawnOffset.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1127236590681207543, guid: 056386234359cd642ae947aeddb67190, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.74
