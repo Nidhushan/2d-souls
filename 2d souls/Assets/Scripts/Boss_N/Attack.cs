@@ -9,15 +9,17 @@ public class Attack : StateMachineBehaviour
     Transform player;
     Rigidbody2D rb;
     public float attackRange = 3f;
-    //AIPath aiPath;
+    public float desiredSpeed = 0.1f;
+    AIPath aiPath;
 
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = animator.GetComponentInParent<Rigidbody2D>();
-        //aiPath = animator.GetComponentInParent<AIPath>();
+        aiPath = animator.GetComponentInParent<AIPath>();
         int randomNum = Random.Range(1, 7);
+        aiPath.maxSpeed = desiredSpeed;
         switch (randomNum)
         {
             case 1:
@@ -67,6 +69,12 @@ public class Attack : StateMachineBehaviour
         animator.ResetTrigger("Attack 5");
         animator.ResetTrigger("Attack Kick");
         animator.ResetTrigger("Player Away");
+        if (animator.GetBool("Dead"))
+        {
+            Debug.Log("Inside if die");
+            aiPath.maxSpeed = 0.1f;
+            animator.Play("Dead");
+        }
     }
 
 }
