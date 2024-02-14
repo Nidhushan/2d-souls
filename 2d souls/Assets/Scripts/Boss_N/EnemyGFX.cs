@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class EnemyGFX : MonoBehaviour
 {
@@ -17,12 +18,13 @@ public class EnemyGFX : MonoBehaviour
     public HealthBar healthbar;
     private const string targetSequence = "eal";
     private string currentSequence = "";
+    private bool isCheckingSequence = false;
     public Animator mAnimator;
     public Animator plyrAnimator;
     private Color originalColor;
     public float attackRange = 10.2f;
     public float heroAttackRange = 10.2f;
-
+    public GameObject heroGameOver;
     private float timer = 0f;
     private float interval = 0.5f;
     private float heroAttackTimer = 0f;
@@ -31,6 +33,8 @@ public class EnemyGFX : MonoBehaviour
     private float cheatInterval = 3f;
     private float stageChangeTimer = 0f;
     private float stageChangeInterval = 0.5f;
+    public TextMeshProUGUI textMeshProUGUI;
+    private bool stopDamage = false;
 
     public HeroKnight hero;
 
@@ -47,30 +51,43 @@ public class EnemyGFX : MonoBehaviour
 
     void Update()
     {
+        //if (isCheckingSequence)
+        //{
+        //    // Check if any key is released
+        //    if (Input.anyKey)
+        //    {
+        //        // Get the most recently pressed key
+        //        string keyPressed = Input.inputString;
+
+        //        // Add the key to the current sequence
+        //        currentSequence += keyPressed.ToLower();
+
+        //        // Check if the current sequence matches the target sequence
+        //        if (currentSequence.Equals(targetSequence))
+        //        {
+        //            // Do something when the target sequence is entered
+        //            Debug.Log("Healing initiated!");
+        //            hero.ResetHealth();
+        //            // Reset the current sequence for the next input
+        //            currentSequence = "";
+        //            // Stop checking the sequence
+        //            isCheckingSequence = false;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    // Check if the cheat code trigger is pressed
+        //    if (Input.GetKeyDown(KeyCode.H))
+        //    {
+        //        // Start checking the sequence
+        //        isCheckingSequence = true;
+        //    }
+        //}
+
         if (Input.GetKeyDown(KeyCode.H))
         {
-            // Get the most recently pressed key
-            string keyPressed = Input.inputString;
-
-            // Add the key to the current sequence
-            currentSequence += keyPressed.ToLower();
-
-            // Check if the current sequence matches the target sequence
-            if (currentSequence.Equals(targetSequence))
-            {
-                // Do something when the target sequence is entered
-                Debug.Log("Healing initiated!");
-                hero.ResetHealth();
-
-                cheatTimer += Time.deltaTime;
-                if (cheatTimer >= cheatInterval)
-                {
-                    // Reset the current sequence for the next input
-                    currentSequence = "";
-                    cheatTimer = 0f;
-                }
-                
-            }
+            hero.ResetHealth(); 
         }
 
         Transform parentTransform = transform.parent;
@@ -97,6 +114,7 @@ public class EnemyGFX : MonoBehaviour
             // Check if player is within attack range and enemy is facing the player and if attack animation is playing
             AnimatorStateInfo stateInfo = plyrAnimator.GetCurrentAnimatorStateInfo(0);
             AnimatorStateInfo bossStateInfo = mAnimator.GetCurrentAnimatorStateInfo(0);
+
             if (directionToPlayer.magnitude <= attackRange &&
                 Vector3.Dot(transform.forward, directionToPlayer.normalized) > 0.5f &&
                 (stateInfo.IsName("Attack1") || stateInfo.IsName("Attack2") || stateInfo.IsName("Attack3")))
@@ -110,9 +128,11 @@ public class EnemyGFX : MonoBehaviour
                     timer = 0f;
                 }
             }
-            if(directionToPlayer.magnitude <= heroAttackRange &&
+            Debug.Log(directionToPlayer.magnitude <= heroAttackRange);
+
+            if (directionToPlayer.magnitude <= heroAttackRange &&
                 Vector3.Dot(transform.forward, directionToPlayer.normalized) > 0.5f &&
-                (bossStateInfo.IsName("Attack 1") || bossStateInfo.IsName("Attack 3") || bossStateInfo.IsName("Attack 4")) || (bossStateInfo.IsName("Attack 5") || bossStateInfo.IsName("Attack") || bossStateInfo.IsName("Attack Kick")))
+                (bossStateInfo.IsName("Attack 1") || bossStateInfo.IsName("Attack 3") || bossStateInfo.IsName("Attack 4")) || (bossStateInfo.IsName("Attack 5") || bossStateInfo.IsName("Attack") || bossStateInfo.IsName("Attack Kick")) && !stateInfo.IsName("Roll"))
             {
                 heroAttackTimer += Time.deltaTime;
                 if (heroAttackTimer >= heroAttackInterval)
@@ -120,7 +140,8 @@ public class EnemyGFX : MonoBehaviour
                     Debug.Log("Hero damage taken");
                     if (hero.health <= 10)
                     {
-                        SceneManager.LoadScene("Start");
+                        gameOver();
+                        return;
                     }
                     hero.TakeDamage(10);
                     heroAttackTimer = 0f;
@@ -149,6 +170,7 @@ public class EnemyGFX : MonoBehaviour
         if(health == 20)
         {
             int randomNum = Random.Range(1, 4);
+            Debug.Log(randomNum);
             if (randomNum == 1)
                 ResetHealth();
         }
@@ -175,5 +197,15 @@ public class EnemyGFX : MonoBehaviour
         healthbar.SetHealth(maxHealth);
     }
 
+    public void gameOver()
+    {
+        heroGameOver.SetActive(true);
+    }
+
+    public void tryAgain()
+    {
+        heroGameOver.SetActive(false);
+        SceneManager.LoadScene("Start");
+    }
 
 }
