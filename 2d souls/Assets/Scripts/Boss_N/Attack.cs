@@ -69,8 +69,6 @@ public class Attack : StateMachineBehaviour
         animator.ResetTrigger("Attack 5");
         animator.ResetTrigger("Attack Kick");
         animator.ResetTrigger("Player Away");
-        Debug.Log(animator.GetCurrentAnimatorStateInfo(0).IsName("Dead"));
-        Debug.Log(animator.GetBool("Dead"));
         if (animator.GetBool("Dead"))
         {
             Debug.Log("Inside if die");
